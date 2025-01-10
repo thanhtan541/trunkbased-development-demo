@@ -1,6 +1,29 @@
 #!/usr/bin/env bash
 
 set -x
+# Immediately exit on first fail command and print the first exit status of the first failing command in the pipeline.
+# set -eo pipefail
+
+# Error util
+# Use: err some error message -> echo "[<timestamp>]: some error message >&2
+err() {
+  echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $*" >&2
+}
+
+# Create image
+# Use: err some error message -> echo "[<timestamp>]: some error message >&2
+build_image() {
+  eval $(minikube docker-env)                                               
+  docker build -t $1 $2
+  # verify image created successfully
+  docker image inspect "$1"
+  # $? is last return code. If 0 mean port is in-used
+  if [ $? -ne 0 ]; then
+      err "Image $1 is not available"
+      err "Please try again!"
+      exit 1
+  fi
+}
 
 # Fetch current branch
 # Get the current branch name
@@ -16,7 +39,10 @@ fi
 # Get substring of ticket_id from branch_name
 # E.g: feature/UNEY-2222-something -> UNEY-2222
 ticket_id=${branch_name:8:9}
-echo "Initializing Local Environment: ${ticket_id}"
+# lovercase to create image
+lovercase_ticket_id=$(echo "$ticket_id" | tr '[:upper:]' '[:lower:]')
+
+echo "Initializing Local Environment: ${lovercase_ticket_id}"
 
 # Find an available port in the range 8000-9000
 # Todo: make range dynamic
@@ -45,19 +71,7 @@ current_commit_hash=$(git rev-parse HEAD)
 #minikube_tag is used to verified curernt version
 minikube_tag=${current_commit_hash:0:3}
 app_name="fe"
-minikube_image="$ticket_id-$app_name:$minikube_tag"
+minikube_image="$lovercase_ticket_id-$app_name:$minikube_tag"
 echo "Building image $minikube_image for deployment"
-
-# Create image
-# Use: err some error message -> echo "[<timestamp>]: some error message >&2
-init_image() {
-  eval $(minikube docker-env)                                               
-  docker build -t $*
-}
-
-# Error util
-# Use: err some error message -> echo "[<timestamp>]: some error message >&2
-err() {
-  echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $*" >&2
-}
+build_image $minikube_image ./repos/react-app/.
 
