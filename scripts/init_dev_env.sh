@@ -8,8 +8,8 @@ branch_name=$(git rev-parse --abbrev-ref HEAD)
 
 # Skip appending for merge commits and rebase
 if [[ "$branch_name" == "HEAD" || $branch_name != feature/UNEY-* || "$branch_name" == "" ]]; then
-  echo >&2 "Invalid feature branch_name"
-  echo >&2 "Please follow convention: feature/UNEY-*"
+  err "Invalid feature branch_name"
+  err "Please follow convention: feature/UNEY-*"
   exit 0
 fi
 
@@ -33,10 +33,16 @@ done
 
 
 if [[ $found_port -eq 0 ]]; then
-  echo >&2 "No available port in range 8000..9000"
-  echo >&2 "Please try again! "
+  err "No available port in range 8000..9000"
+  err "Please try again! "
   exit 0
 fi
 
 echo $port
+
+# Error util
+# Use: err some error message -> echo "[<timestamp>]: some error message >&2
+err() {
+  echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $*" >&2
+}
 
