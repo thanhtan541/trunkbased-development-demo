@@ -16,11 +16,11 @@ fi
 # Get substring of ticket_id from branch_name
 # E.g: feature/UNEY-2222-something -> UNEY-2222
 ticket_id=${branch_name:8:9}
-echo "${ticket_id}"
-found_port=0
+echo "Initializing Local Environment: ${ticket_id}"
 
 # Find an available port in the range 8000-9000
 # Todo: make range dynamic
+found_port=0
 for port in {8000..9000}; do
     nc -zv 127.0.0.1 $port
     # $? is last return code. If 0 mean port is in-used
@@ -31,14 +31,13 @@ for port in {8000..9000}; do
     fi
 done
 
-
 if [[ $found_port -eq 0 ]]; then
   err "No available port in range 8000..9000"
   err "Please try again! "
   exit 0
 fi
 
-echo $port
+echo "Setting port $port for deployment"
 
 # Error util
 # Use: err some error message -> echo "[<timestamp>]: some error message >&2
