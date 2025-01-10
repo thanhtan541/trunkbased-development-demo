@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 set -x
-set -eo pipefail
 
 # Fetch current branch
 # Get the current branch name
@@ -18,8 +17,26 @@ fi
 # E.g: feature/UNEY-2222-something -> UNEY-2222
 ticket_id=${branch_name:8:9}
 echo "${ticket_id}"
+found_port=0
 
-# fetch available port
-# for local enviroment
+# Find an available port in the range 8000-9000
+# Todo: make range dynamic
+for port in {8000..9000}; do
+    nc -zv 127.0.0.1 $port
+    # $? is last return code. If 0 mean port is in-used
+    if [ $? -ne 0 ]; then
+        echo "Port $port is available"
+        found_port=1
+        break
+    fi
+done
 
+
+if [[ $found_port -eq 0 ]]; then
+  echo >&2 "No available port in range 8000..9000"
+  echo >&2 "Please try again! "
+  exit 0
+fi
+
+echo $port
 
