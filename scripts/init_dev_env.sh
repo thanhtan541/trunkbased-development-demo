@@ -39,6 +39,22 @@ fi
 
 echo "Setting port $port for deployment"
 
+# Setting image with naming convention:
+# <ticket_id>-<app_name>:<version>
+current_commit_hash=$(git rev-parse HEAD)
+#minikube_tag is used to verified curernt version
+minikube_tag=${current_commit_hash:0:3}
+app_name="fe"
+minikube_image="$ticket_id-$app_name:$minikube_tag"
+echo "Building image $minikube_image for deployment"
+
+# Create image
+# Use: err some error message -> echo "[<timestamp>]: some error message >&2
+init_image() {
+  eval $(minikube docker-env)                                               
+  docker build -t $*
+}
+
 # Error util
 # Use: err some error message -> echo "[<timestamp>]: some error message >&2
 err() {
