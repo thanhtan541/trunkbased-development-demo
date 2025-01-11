@@ -26,13 +26,30 @@ build_image() {
   docker build -t $1 $2
   # verify image created successfully
   docker image inspect "$1"
-  # $? is last return code. If 0 mean port is in-used
+  # $? is last return code. If 0 mean previous command failed
   if [ $? -ne 0 ]; then
       err "Image $1 is not available"
       err "Please try again!"
       exit 1
   fi
 }
+
+k8s_namespace_prefix="front-end-dev"
+#check king SLOT number
+# SLOT=0 mean target namespace: front-end-dev-0
+# support  
+# TODO: err with value is non-number
+if [[ -z "${SLOT}" || $SLOT -gt 1 ]]; then
+  err "Please specific valid SLOT number! Provided value: 0,1"
+  exit 1
+fi
+target_k8s_namespace="$k8s_namespace_prefix-$SLOT"
+echo "Checking namespace $target_k8s_namespace status"
+kubectl get namespaces/$target_k8s_namespace
+if [ $? -ne 0 ]; then
+  err "namespaces/$target_k8s_namespace is not available"
+  exit 1
+fi
 
 # Fetch current branch
 # Get the current branch name
@@ -52,27 +69,6 @@ ticket_id=${branch_name:8:9}
 lovercase_ticket_id=$(echo "$ticket_id" | tr '[:upper:]' '[:lower:]')
 
 echo "Initializing Local Environment: ${lovercase_ticket_id}"
-
-# Find an available port in the range 8000-9000
-# Todo: make range dynamic
-found_port=0
-for port in {8000..9000}; do
-    nc -zv 127.0.0.1 $port
-    # $? is last return code. If 0 mean port is in-used
-    if [ $? -ne 0 ]; then
-        echo "Port $port is available"
-        found_port=1
-        break
-    fi
-done
-
-if [[ $found_port -eq 0 ]]; then
-  err "No available port in range 8000..9000"
-  err "Please try again! "
-  exit 0
-fi
-
-echo "Setting port $port for deployment"
 
 # Setting image with naming convention:
 # <ticket_id>-<app_name>:<version>
