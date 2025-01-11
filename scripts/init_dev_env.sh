@@ -48,6 +48,9 @@ echo "Checking namespace $target_k8s_namespace status"
 kubectl get namespaces/$target_k8s_namespace
 if [ $? -ne 0 ]; then
   err "namespaces/$target_k8s_namespace is not available"
+  err "Use: "
+  err "    kubectl create namespace $target_k8s_namespace"
+  err "to create target namespace"
   exit 1
 fi
 
@@ -80,4 +83,11 @@ minikube_image_tag="$lovercase_ticket_id-$app_name-$current_deploy_hash"
 minikube_image="react-app:$minikube_image_tag"
 echo "Building image $minikube_image for deployment"
 build_image $minikube_image ./repos/react-app/.
+
+echo "Building k8s resources with kustomization"
+export IMAGE_TAG=$minikube_image_tag
+kustomize build ./frontend_app/overlays/dev$SLOT | envsubst |\
+    kubectl apply -f -
+
+echo "K8s resources for $minikube_image_tag ready"
 
