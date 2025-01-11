@@ -68,10 +68,11 @@ echo "Setting port $port for deployment"
 # Setting image with naming convention:
 # <ticket_id>-<app_name>:<version>
 current_commit_hash=$(git rev-parse HEAD)
-#minikube_tag is used to verified curernt version
-minikube_tag=${current_commit_hash:0:3}
+#current_deploy_hash is used to verified curernt version
+current_deploy_hash=${current_commit_hash:0:3}
 app_name="fe"
-minikube_image="$lovercase_ticket_id-$app_name:$minikube_tag"
+minikube_image_tag="$lovercase_ticket_id-$app_name-$current_deploy_hash"
+minikube_image="react-app:$minikube_image_tag"
 echo "Building image $minikube_image for deployment"
 build_image $minikube_image ./repos/react-app/.
 
