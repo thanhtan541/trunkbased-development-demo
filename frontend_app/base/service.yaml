@@ -1,12 +1,13 @@
-kind: Service
 apiVersion: v1
+kind: Service
 metadata:
-  name: the-service
+  name: react-app-service
 spec:
   selector:
-    deployment: demo
-  type: LoadBalancer
+    deployment: react-app
   ports:
-  - protocol: TCP
-    port: 8666
-    targetPort: 8080
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: NodePort
+

@@ -1,25 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: the-deployment
+  name: react-app-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      deployment: demo
+      deployment: react-app
   template:
     metadata:
       labels:
-        deployment: demo
+        deployment: react-app
     spec:
       containers:
-      - name: the-container
-        image: monopole/demo:1
-        command: ["/demo",
-                  "--port=8080",
-                  "--enableRiskyFeature=$(ENABLE_RISKY)"]
+      - name: react-app-container
+        imagePullPolicy: IfNotPresent # Fetch from local register
+        image: react-minikube-app # Use your image name here
         ports:
-        - containerPort: 8080
+        - containerPort: 80
         env:
         - name: ALT_GREETING
           valueFrom:

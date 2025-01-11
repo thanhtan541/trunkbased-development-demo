@@ -4,6 +4,15 @@ set -x
 # Immediately exit on first fail command and print the first exit status of the first failing command in the pipeline.
 # set -eo pipefail
 
+if ! [ -x "$(command -v envsubst)" ]; then
+  echo >&2 "Error: envsubst is not installed."
+  echo >&2 "Use:"
+  echo >&2 "    brew install brew install gettext"
+  echo >&2 "    brew link --force gettext"
+  echo >&2 "to install it."
+  exit 1
+fi
+
 # Error util
 # Use: err some error message -> echo "[<timestamp>]: some error message >&2
 err() {
