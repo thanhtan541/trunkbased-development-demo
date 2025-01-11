@@ -1,7 +1,7 @@
-namespace: front-end-dev
+namespace: front-end-dev-1
 namePrefix: dev-
 commonAnnotations:
-  note: Hello, I am dev env!
+  note: Hello, I am dev env 1!
 resources:
 - ../../base
 patches:
