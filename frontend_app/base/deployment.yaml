@@ -6,16 +6,16 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      deployment: react-app
+      deployment: "react-app-${IMAGE_TAG}"
   template:
     metadata:
       labels:
-        deployment: react-app
+        deployment: "react-app-${IMAGE_TAG}"
     spec:
       containers:
       - name: react-app-container
         imagePullPolicy: IfNotPresent # Fetch from local register
-        image: react-minikube-app # Use your image name here
+        image: "react-app:${IMAGE_TAG}" # Use your image name here
         ports:
         - containerPort: 80
         env:
