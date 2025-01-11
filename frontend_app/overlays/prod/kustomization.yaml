@@ -1,0 +1,6 @@
+namespace: front-end
+namePrefix: prod
+commonAnnotations:
+  note: Hello, I am prod!
+resources:
+- ../../base

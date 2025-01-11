@@ -28,11 +28,4 @@ if ! [ -x "$(command -v minikube)" ]; then
   echo >&2 "  "kubectl version --client""
 fi
 
-VAR_EXAMPLE="${POSTGRES_USER:=fall_back}"
-# Skip Flag
-if [[ -z "${SKIP_DOCKER}" ]]
-then
-  echo "Optional"
-fi
-
->&2 echo "Enviroment is all set, ready to go!"
+>&2 echo "Local K8s is all set, ready to go!"
