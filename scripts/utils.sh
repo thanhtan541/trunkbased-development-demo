@@ -27,3 +27,18 @@ find_port() {
   echo "Setting port $port for deployment"
 }
 
+
+#######################################
+# Cleanup files from the backup directory.
+# Globals:
+#   BACKUP_DIR
+#   ORACLE_SID
+# Arguments:
+#   None
+#######################################
+function cleanup() {
+  echo "Cleaning up"
+}
+
+# Example of todo with your name inside
+# TODO(tdog): Handle the unlikely edge cases (bug ####)
