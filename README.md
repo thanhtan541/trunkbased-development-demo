@@ -1,6 +1,4 @@
 # Trunkbased-developement demo
-
-Installation
 ------------
 ### Pre-requisites
 You'll need to have:
