@@ -1,4 +1,4 @@
-# How to setup Code Coverage CI for Rust with SonarQube
+# Trunkbased-developement demo
 
 Installation
 ------------
