@@ -40,8 +40,6 @@ kubectl create namespace ${RESOURCE_GROUP_PREFIX}-${SLOT}
 
 ### Initialize develoment enviroment
 All the steps are included in `./scripts/init_dev_env.sh`
-There are Enviroment Variables need to be specifiedj.
-1. **SLOT**: a number of pre-defined namespace to deploy your k8s resources
 
 ```bash
 ./scripts/init_dev_env.sh
