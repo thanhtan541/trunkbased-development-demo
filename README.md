@@ -16,6 +16,9 @@ You'll need to have:
 3. There are Enviroment Variables need to be specifiedj.
   - **SLOT**: a number of pre-defined namespace to deploy your k8s resources
   - **RESOURCE_GROUP_PREFIX**: logical prefix of namespace
+  - **VITE_FEATURE_FLAG_A**: feature flag to toggle on-developing feature between prod and dev.
+    - **VITE_FEATURE_FLAG_A=enabled** to enable feature, otherwise it's disabled.
+
 ```bash
 export RESOURCE_GROUP_PREFIX="front-end-dev" # this value is used for this demo
 export SLOT=0
@@ -25,6 +28,16 @@ export SLOT=0
 # Remove when process is finished
 unset RESOURCE_GROUP_PREFIX
 unset SLOT
+```
+
+### Prepare build source
+```bash
+cd ./repos/react-app
+VITE_FEATURE_FLAG_A=enabled npm run build
+
+# or without the flag
+cd ./repos/react-app
+npm run build
 ```
 
 ### Initialize pre-defined k8s namespace
