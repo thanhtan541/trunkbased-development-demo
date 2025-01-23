@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: actix-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      deployment: "actix-app-${IMAGE_TAG}"
+  template:
+    metadata:
+      labels:
+        deployment: "actix-app-${IMAGE_TAG}"
+    spec:
+      containers:
+        - name: actix-app-container
+          imagePullPolicy: IfNotPresent # Fetch from local register
+          image: "actix-app:${IMAGE_TAG}" # Use your image name here
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ALT_GREETING
+              valueFrom:
+                configMapKeyRef:
+                  name: the-map
+                  key: altGreeting
+            - name: ENABLE_RISKY
+              valueFrom:
+                configMapKeyRef:
+                  name: the-map
+                  key: enableRisky

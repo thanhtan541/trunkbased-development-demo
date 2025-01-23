@@ -34,7 +34,7 @@ build_image() {
   fi
 }
 
-k8s_namespace_prefix="front-end-dev"
+k8s_namespace_prefix="dev"
 #check king SLOT number
 # SLOT=0 mean target namespace: front-end-dev-0
 # support
@@ -75,16 +75,23 @@ echo "Initializing Local Environment: ${lovercase_ticket_id}"
 # <ticket_id>-<app_name>:<version>
 current_commit_hash=$(git rev-parse HEAD)
 #current_deploy_hash is used to verified curernt version
+#should be used for repos, not k8s
 current_deploy_hash=${current_commit_hash:0:3}
-app_name="fe"
-minikube_image_tag="${lovercase_ticket_id}-${app_name}-${current_deploy_hash}"
-minikube_image="react-app:${minikube_image_tag}"
-echo "Building image ${minikube_image} for deployment"
-build_image ${minikube_image} ./repos/react-app/.
+minikube_image_tag="${lovercase_ticket_id}-${current_deploy_hash}"
+
+# Frontend
+fe_minikube_image="react-app:${minikube_image_tag}"
+echo "Building frontend image ${minikube_image} for deployment"
+build_image ${fe_minikube_image} ./repos/react-app/.
+
+# Backend
+be_minikube_image="actix-app:${minikube_image_tag}"
+echo "Building backend image ${minikube_image} for deployment"
+build_image ${be_minikube_image} ./repos/actix-app/.
 
 echo "Building k8s resources with kustomization"
 export IMAGE_TAG=${minikube_image_tag}
-kustomize build ./frontend_app/overlays/dev${SLOT} | envsubst |\
+kustomize build ./demo_app/overlays/dev${SLOT} | envsubst |\
     kubectl apply -f -
 
 echo "K8s resources for ${minikube_image_tag} ready"
