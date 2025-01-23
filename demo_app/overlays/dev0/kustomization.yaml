@@ -1,8 +1,8 @@
-namespace: front-end-dev-0
+namespace: dev-0
 namePrefix: dev-
 commonAnnotations:
   note: Hello, I am dev env 0!
 resources:
-- ../../base
+  - ../../base
 patches:
-- path: map.yaml
+  - path: map.yaml
