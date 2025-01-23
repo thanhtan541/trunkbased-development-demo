@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
@@ -17,6 +17,10 @@ function App() {
         </a>
       </div>
       <h1>Vite + React</h1>
+      <div className="card">
+        <p>Profile section</p>
+        <ProfileSection />
+      </div>
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
@@ -45,4 +49,55 @@ function BetaButton() {
       This is in under development
     </button>
   );
+}
+
+function ProfileSection() {
+  const [profile, setProfile] = useState<Profile | null>(null);
+
+  useEffect(() => {
+    // Read: https://maxrozen.com/race-conditions-fetching-data-react-with-useeffect
+    let ignore = false;
+    setProfile(null);
+    fetchProfile().then((result) => {
+      if (!ignore) {
+        setProfile(result);
+      }
+    });
+    return () => {
+      ignore = true;
+    };
+  }, []);
+
+  return (
+    <article
+      style={{
+        backgroundColor: "whitesmoke",
+        border: "1px solid black",
+        borderRadius: "5px",
+      }}
+    >
+      <p>Name: {profile?.name}</p>
+      <p>Role: {profile?.role}</p>
+    </article>
+  );
+}
+
+const apiUrl = "http://127.0.0.1:8080/profile";
+
+async function fetchProfile(): Promise<Profile> {
+  const response = await fetch(apiUrl);
+  // Check if the response is successful (status code 200-299)
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+
+  const data = await response.json();
+  const result: Profile = data as Profile;
+
+  return result;
+}
+
+interface Profile {
+  name: string;
+  role: string;
 }
