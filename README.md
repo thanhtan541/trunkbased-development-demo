@@ -20,7 +20,7 @@ You'll need to have:
     - **VITE_FEATURE_FLAG_A=enabled** to enable feature, otherwise it's disabled.
 
 ```bash
-export RESOURCE_GROUP_PREFIX="front-end-dev" # this value is used for this demo
+export RESOURCE_GROUP_PREFIX="dev" # this value is used for this demo, supported values: dev, stag, prod
 export SLOT=0
 
 ./do_something
