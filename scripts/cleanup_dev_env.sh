@@ -14,7 +14,7 @@ if [[ -z "${SLOT}" || $SLOT -gt 1 ]]; then
   exit 1
 fi
 
-k8s_namespace_prefix="front-end-dev"
+k8s_namespace_prefix="dev"
 target_k8s_namespace="${k8s_namespace_prefix}-${SLOT}"
 
 echo >&2 "Removing namespace ${target_k8s_namespace}"

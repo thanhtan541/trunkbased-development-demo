@@ -60,3 +60,10 @@ All the steps are included in `./scripts/init_dev_env.sh`
 ```bash
 ./scripts/cleanup_dev_env.sh
 ```
+
+### F.A.Q
+1. Minikube is not able to start. Solution: re-init the minikube instance.
+```bash
+minikube delete
+minikube start
+```
