@@ -56,6 +56,21 @@ All the steps are included in `./scripts/init_dev_env.sh`
 ./scripts/init_dev_env.sh
 ```
 
+### Check the deployment status
+```bash
+kubectl get pods -n dev-0 # SLOT=0
+# Result
+NAME                                        READY   STATUS    RESTARTS   AGE
+dev-actix-app-deployment-55497cb846-rkwcl   1/1     Running   0          9s
+dev-react-app-deployment-bc9d5f4d-dwzh2     1/1     Running   0          9s
+```
+
+### Expose services
+```bash
+minikube service dev-react-app-service -n dev-0 # Frontend from SLOT=0
+minikube service dev-actix-app-service -n dev-0 # Backend from SLOT=0
+```
+
 ### Remove local resources
 ```bash
 ./scripts/cleanup_dev_env.sh
