@@ -30,13 +30,11 @@ async fn profile() -> Result<impl Responder> {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    println!("Running service at: 127.0.0.1:8080");
+
     HttpServer::new(|| {
-        let cors = Cors::default()
-            //Todo: Put to confguration and don't use localhost. it cause prelight problem in FE.
-            .allowed_origin("http://127.0.0.1:8000")
-            .allowed_methods(vec!["GET", "POST", "OPTIONS"])
-            // .allowed_header(http::header::CONTENT_TYPE)
-            .max_age(3600);
+        // All origins are allowed in localhost
+        let cors = Cors::permissive();
         App::new()
             .wrap(cors)
             .service(hello)

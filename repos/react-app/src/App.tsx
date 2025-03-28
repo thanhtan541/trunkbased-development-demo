@@ -82,9 +82,8 @@ function ProfileSection() {
   );
 }
 
-const apiUrl = "http://127.0.0.1:8080/profile";
-
 async function fetchProfile(): Promise<Profile> {
+  const apiUrl = import.meta.env.VITE_APP_API_URL + "/profile";
   const response = await fetch(apiUrl);
   // Check if the response is successful (status code 200-299)
   if (!response.ok) {
