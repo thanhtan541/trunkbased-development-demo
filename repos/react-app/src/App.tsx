@@ -17,9 +17,19 @@ function App() {
         </a>
       </div>
       <h1>Vite + React</h1>
-      <div className="card">
-        <p>Profile section</p>
-        <ProfileSection />
+      <div className="container">
+        <div className="card">
+          <p>Profile section</p>
+          <ProfileSection />
+        </div>
+        {import.meta.env.VITE_FEATURE_FLAG_A == "enabled" ? (
+          <div className="card">
+            <p>Billing</p>
+            <BetaButton />
+          </div>
+        ) : (
+          <p>Production</p>
+        )}
       </div>
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
@@ -29,14 +39,6 @@ function App() {
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-      {import.meta.env.VITE_FEATURE_FLAG_A == "enabled" ? (
-        <BetaButton />
-      ) : (
-        <p>Production</p>
-      )}
     </>
   );
 }
@@ -45,9 +47,16 @@ export default App;
 
 function BetaButton() {
   return (
-    <button style={{ backgroundColor: "red" }}>
-      This is in under development
-    </button>
+    <article
+      style={{
+        backgroundColor: "whitesmoke",
+        border: "1px solid black",
+        borderRadius: "5px",
+      }}
+    >
+      <p>Due amount: 1.000$</p>
+      <p>Due date: 10/10/2029</p>
+    </article>
   );
 }
 
